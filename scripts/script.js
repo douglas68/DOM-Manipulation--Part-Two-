@@ -73,11 +73,29 @@ subMenuEl.style.backgroundColor = 'var(--sub-menu-bg)';
 subMenuEl.classList.add('flex-around');
 
 //Part 4: Adding Menu Interaction
-// Select and cache the all of the <a> elements inside of topMenuEl in a variable named topMenuLinks.
+// Select and cache all <a> elements inside topMenuEl
+const topMenuLinks = topMenuEl.querySelectorAll('a');
 
-// Attach a delegated 'click' event listener to topMenuEl.
-    // The first line of code of the event listener function should call the event object's preventDefault() method.
-    
-    // The second line of code of the function should immediately return if the element clicked was not an <a> element.
-    
-    // Log the content of the <a> to verify the handler is working.
+// Attach a delegated click event listener to topMenuEl
+topMenuEl.addEventListener('click', function (event) {
+  
+  // 1. Prevent the default link behavior
+  event.preventDefault();
+
+  // 2. Exit if the clicked element is NOT an <a>
+  if (event.target.tagName !== 'A') return;
+
+// The event listener should add the active class to the <a> element that was clicked, unless it was already active, in which case it should remove it.
+const clickLink = event.target;
+
+topMenuLinks.forEach(link => link.classList.remove('active'));
+
+if(!isActive){
+    clickLink.classList.add('active');
+}
+
+  // 3. Log the clicked <a>'s content
+  console.log(event.target.textContent);
+});
+
+
