@@ -77,25 +77,24 @@ subMenuEl.classList.add('flex-around');
 const topMenuLinks = topMenuEl.querySelectorAll('a');
 
 // Attach a delegated click event listener to topMenuEl
-topMenuEl.addEventListener('click', function (event) {
-  
+topMenuEl.addEventListener('click', (event) => {
   // 1. Prevent the default link behavior
   event.preventDefault();
 
   // 2. Exit if the clicked element is NOT an <a>
-  if (event.target.tagName !== 'A') return;
+const clickedLink = event.target.closest('a');
+  if (!clickedLink) return;
 
-// The event listener should add the active class to the <a> element that was clicked, unless it was already active, in which case it should remove it.
-const clickLink = event.target;
+  const isActive = clickedLink.classList.contains('active');
 
 topMenuLinks.forEach(link => link.classList.remove('active'));
 
 if(!isActive){
-    clickLink.classList.add('active');
+  clickedLink.classList.add('active');
 }
 
   // 3. Log the clicked <a>'s content
-  console.log(event.target.textContent);
+  console.log(clickedLink.textContent.trim());
 });
 
-
+//Part 5: Adding Submenu Interaction
