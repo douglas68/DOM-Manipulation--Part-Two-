@@ -72,6 +72,8 @@ subMenuEl.style.backgroundColor = 'var(--sub-menu-bg)';
 // Add flex-around class
 subMenuEl.classList.add('flex-around');
 
+subMenuEl.style.top = '0';
+
 //Part 4: Adding Menu Interaction
 // Select and cache all <a> elements inside topMenuEl
 const topMenuLinks = topMenuEl.querySelectorAll('a');
@@ -85,16 +87,62 @@ topMenuEl.addEventListener('click', (event) => {
 const clickedLink = event.target.closest('a');
   if (!clickedLink) return;
 
-  const isActive = clickedLink.classList.contains('active');
+  const wasActive = clickedLink.classList.contains('active');
 
 topMenuLinks.forEach(link => link.classList.remove('active'));
 
-if(!isActive){
-  clickedLink.classList.add('active');
+if(wasActive){
+
+  subMenuEl.style.top="0";
+  return;
 }
 
-  // 3. Log the clicked <a>'s content
-  console.log(clickedLink.textContent.trim());
+clickedLink.classList.add('active');
+
+const key = clickedLink.textContent.trim().toLowerCase();
+const linkObj = menuLinks.find(l => l.text === key);
+
+
+if (linkObj && linkObj.subLinks) {
+  buildSubmenu(linkObj.subLinks);
+  subMenuEl.style.top = '100%';        
+} else {
+
+
+  subMenuEl.style.top = '0';           
+  topMenuLinks.forEach(link => link.classList.remove('active'));
+  mainEl.innerHTML = '<h1>About</h1>';
+}
+
+  console.log(key);
+
 });
 
 //Part 5: Adding Submenu Interaction
+
+function buildSubmenu(subLinks) {
+  subMenuEl.innerHTML ='';
+
+  subLinks.forEach(obj => {
+    const a =document.createElement('a');
+    a.setAttribute('href', obj.href);
+    a.textContent = obj.text;
+    subMenuEl.appendChild(a)
+  });
+}
+
+subMenuEl.addEventListener('click', (event) => {
+event.preventDefault();
+
+const subLink = event.target.closest('a');
+if (!subLink) return;
+
+
+subMenuEl.style.top = '0';
+topMenuLinks.forEach(link => link.classList.remove('active'));
+
+mainEl.innerHTML = `<h1>${subLink.textContent.trim()}</h1>`;
+
+  console.log(subLink.textContent.trim());
+});
+
